@@ -1,3 +1,67 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    font-family: "Montserrat", system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .nav {
+    @apply hover:text-newBlack flex text-[1.1703vw] font-semibold leading-[1.4304vw] text-[#717272];
+  }
+
+  .bg-image {
+    @apply min-h-full w-full object-cover;
+  }
+
+  .destination-image {
+    @apply border-newBlack min-h-full rounded-[0.91145vw] border-[0.1145vw] object-cover;
+  }
+
+  .title {
+    @apply text-[6.51vw] font-extrabold leading-[7.942708vw];
+  }
+
+  .bg-semi-title {
+    @apply text-[4.1666vw] font-medium leading-[5.078125vw];
+  }
+
+  .med-title {
+    @apply text-newBlack text-[2.864vw] font-bold leading-[2.864vw];
+  }
+
+  .semi-title {
+    @apply text-newBlack text-[2.34vw] font-bold leading-[2.864vw];
+  }
+
+  .new-section {
+    @apply mt-[8.984375vw];
+  }
+
+  .card-title {
+    @apply text-newBlack flex text-[1.302vw] font-bold leading-[1.5625vw];
+  }
+
+  .card-image {
+    @apply rounded-t-[0.651vw] object-cover;
+  }
+
+  .card-detail {
+    @apply text-newGrey flex text-[1.1315vw] font-medium leading-[1.3698vw];
+  }
+
+  .paragraph {
+    @apply text-newGrey text-[1.69vw] font-normal leading-[2.864vw];
+  }
+
+  .detail {
+    @apply text-newGrey text-[1.302vw] font-medium leading-[1.5625vw];
+  }
+
+  .image {
+    @apply min-h-full rounded-[0.52vw] object-cover;
+  }
+}

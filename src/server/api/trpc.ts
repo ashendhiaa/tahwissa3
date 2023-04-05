@@ -11,30 +11,12 @@
  * 1. CONTEXT
  *
  * This section defines the "contexts" that are available in the backend API.
- *
+ *>
  * These allow you to access things when processing a request, like the database, the session, etc.
  */
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
-
+import jwt from "jsonwebtoken";
 import { prisma } from "~/server/db";
-
-type CreateContextOptions = Record<string, never>;
-
-/**
- * This helper generates the "internals" for a tRPC context. If you need to use it, you can export
- * it from here.
- *
- * Examples of things you may need it for:
- * - testing, so we don't have to mock Next.js' req/res
- * - tRPC's `createSSGHelpers`, where we don't have req/res
- *
- * @see https://create.t3.gg/en/usage/trpc#-serverapitrpcts
- */
-const createInnerTRPCContext = (_opts: CreateContextOptions) => {
-  return {
-    prisma,
-  };
-};
 
 /**
  * This is the actual context you will use in your router. It will be used to process every request
@@ -42,8 +24,15 @@ const createInnerTRPCContext = (_opts: CreateContextOptions) => {
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = (_opts: CreateNextContextOptions) => {
-  return createInnerTRPCContext({});
+
+export const createTRPCContext = (opts: CreateNextContextOptions) => {
+  const { req, res } = opts;
+
+  return {
+    prisma,
+    req,
+    res,
+  };
 };
 
 /**
@@ -53,21 +42,13 @@ export const createTRPCContext = (_opts: CreateNextContextOptions) => {
  * ZodErrors so that you get typesafety on the frontend if your procedure fails due to validation
  * errors on the backend.
  */
-import { initTRPC } from "@trpc/server";
+import { TRPCError, initTRPC } from "@trpc/server";
 import superjson from "superjson";
-import { ZodError } from "zod";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
-  errorFormatter({ shape, error }) {
-    return {
-      ...shape,
-      data: {
-        ...shape.data,
-        zodError:
-          error.cause instanceof ZodError ? error.cause.flatten() : null,
-      },
-    };
+  errorFormatter({ shape }) {
+    return shape;
   },
 });
 
@@ -93,3 +74,50 @@ export const createTRPCRouter = t.router;
  * are logged in.
  */
 export const publicProcedure = t.procedure;
+
+const checkPermission = t.middleware(async ({ ctx, next }) => {
+  const { req } = ctx;
+
+  const token = req.headers.authorization?.substring(7);
+
+  if (!token) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "You must be logged in to access this resource.",
+    });
+  }
+
+  interface JwtPayload {
+    userId: string;
+  }
+
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+
+  if (!decodedToken.userId) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Invalid token",
+    });
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: decodedToken.userId,
+    },
+  });
+
+  if (!user || user.username !== "ADMIN") {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "You are not authorized to access this resource",
+    });
+  }
+
+  return next({
+    ctx: {
+      user: user,
+    },
+  });
+});
+
+export const privateProcedure = t.procedure.use(checkPermission);

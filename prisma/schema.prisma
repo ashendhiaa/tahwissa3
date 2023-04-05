@@ -1,17 +1,50 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+datasource db {
+    provider     = "mysql"
+    url          = env("DATABASE_URL")
+    relationMode = "prisma"
+}
+
 generator client {
     provider = "prisma-client-js"
 }
 
-datasource db {
-    provider = "sqlite"
-    url      = env("DATABASE_URL")
+model User {
+    id       String @id @default(cuid())
+    username String @unique @db.VarChar(60)
+    name     String @db.VarChar(60)
+    password String @db.VarChar(60)
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Region {
+    id          Int      @id @default(autoincrement())
+    name        String   @db.VarChar(60)
+    about       String   @db.VarChar(130)
+    description String   @db.VarChar(1100)
+    wilayas     Wilaya[]
+}
+
+model Wilaya {
+    id          Int    @id @default(autoincrement())
+    name        String @db.VarChar(60)
+    about       String @db.VarChar(130)
+    description String @db.VarChar(1024)
+    regionId    Int
+    region      Region @relation(fields: [regionId], references: [id])
+    sites       Site[]
+}
+
+model Site {
+    id          Int    @id @default(autoincrement())
+    name        String @db.VarChar(60)
+    description String @db.VarChar(1024)
+    visit       Int
+    link        String @db.VarChar(1024)
+    price       Int
+    longitude   Float
+    latitude    Float
+    wilayaId    Int
+    wilaya      Wilaya @relation(fields: [wilayaId], references: [id])
 }
