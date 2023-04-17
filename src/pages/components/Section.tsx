@@ -54,6 +54,8 @@ const Section = ({
     }
   }, []);
 
+  if (!list) return null;
+
   return (
     <section className="w-full">
       <div className="flex items-center">

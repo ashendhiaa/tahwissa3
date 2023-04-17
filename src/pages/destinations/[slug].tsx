@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-import { useStateRef } from "../hooks";
+import { useStateRef } from "../../hooks";
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 import Link from "next/link";
@@ -134,7 +134,7 @@ const Wilayas = ({ region }: { region: any }) => {
         wilaya.removeEventListener("click", handleSwitch(i - 1));
       });
     };
-  });
+  }, [wilayas, handleSwitch]);
 
   return (
     <div className="row ml-[9.049479166666668vw] mt-[2.864583333333333vw] gap-[6.8359375vw]">

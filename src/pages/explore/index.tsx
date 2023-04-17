@@ -1,4 +1,4 @@
-import { useActions } from "../hooks";
+import { useActions } from "../../hooks";
 import ScrollContainer from "react-indiana-drag-scroll";
 import Image, { type StaticImageData } from "next/image";
 
