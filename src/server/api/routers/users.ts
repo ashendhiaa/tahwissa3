@@ -18,6 +18,7 @@ export const usersRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.user.deleteMany({});
       const { name, username, password } = input;
 
       // Check if user already exists

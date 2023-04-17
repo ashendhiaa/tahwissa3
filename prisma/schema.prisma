@@ -27,13 +27,16 @@ model Region {
 }
 
 model Wilaya {
-    id          Int    @id @default(autoincrement())
-    name        String @db.VarChar(60)
-    about       String @db.VarChar(130)
-    description String @db.VarChar(1024)
-    regionId    Int
-    region      Region @relation(fields: [regionId], references: [id])
-    sites       Site[]
+    id             Int    @id @default(autoincrement())
+    name           String @db.VarChar(60)
+    nickname       String @db.VarChar(60)
+    about          String @db.VarChar(130)
+    description    String @db.VarChar(600)
+    weather        String @db.VarChar(400)
+    transportation String @db.VarChar(270)
+    regionId       Int
+    region         Region @relation(fields: [regionId], references: [id])
+    sites          Site[]
 }
 
 model Site {

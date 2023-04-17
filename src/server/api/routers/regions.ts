@@ -36,22 +36,87 @@ const regions = [
     Petite Kabylie is also famous for its vibrant music and arts scene, with traditional Kabyle music and dance still popular among locals. The region is renowned for its delicious cuisine, which features a mix of Mediterranean and Berber flavors. The region's bustling ports and industrial centers have attracted many foreign investors in recent years, leading to a growth in infrastructure and job opportunities.
     In short, Petite Kabylie is a beautiful and diverse region with a rich history, culture, and economy, making it a must-visit destination for anyone exploring Algeria.`,
   },
+  {
+    name: "Constantinois",
+    about:
+      "Constantinois is a region in the northeast of Algeria, known for its beautiful beaches and rich history.",
+    description: `Constantinois is a region in the northeast of Algeria. It is characterized by its beautiful beaches, lush forests, and rich history. The region is home to the city of Constantine, which is known for its ancient ruins and beautiful architecture. The region is also home to the city of Annaba, which is famous for its beautiful beaches and rich history.`,
+  },
+  {
+    name: "Atlas Sahraoui",
+    about:
+      "Atlas Sahraoui is a region in the midwest of Algeria or known for being predesert",
+    description: `Atlas Sahraoui is a region in the midwest of Algeria or known for being predesert`,
+  },
+  {
+    name: "Aurès",
+    about:
+      "Aurès is a region in mideast of Algeria, known for its rich history and wonderful nature",
+    description:
+      "Aurès is a region in mideast of Algeria, known for its rich history and wonderful nature",
+  },
+  {
+    name: "Toggourt",
+    about:
+      "Toggourt is a region in the mideast of Algeria, known for its rich history and wonderful nature",
+    description:
+      "Toggourt is a region in the mideast of Algeria, known for its rich history and wonderful nature",
+  },
+  {
+    name: "Le M'Zab",
+    about:
+      "M'Zab is a region in middle of Algeria, encompasses the wilayas of Ghardaia and El Meniaa, and is home to Beni M'Zab",
+    description:
+      "M'Zab is a region in middle of Algeria, encompasses the wilayas of Ghardaia and El Meniaa, and is home to Beni M'Zab",
+  },
+  {
+    name: "Saoura",
+    about:
+      "Saoura is a region in the southwest of Algeria, known for its rich history and wonderful nature",
+    description:
+      "Saoura is a region in the southwest of Algeria, known for its rich history and wonderful nature",
+  },
+  {
+    name: "Oasis",
+    about:
+      "Oasis is a region in the southeast of Algeria, known for its rich history and wonderful nature",
+    description:
+      "Oasis is a region in the southeast of Algeria, known for its rich history and wonderful nature",
+  },
 ];
 
 export const regionsRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.site.findMany();
+    return ctx.prisma.region.findMany({
+      include: {
+        wilayas: {
+          select: {
+            name: true,
+            id: true,
+          },
+        },
+      },
+    });
   }),
   getOne: publicProcedure
     .input(
       z.object({
-        id: z.number(),
+        name: z.string(),
       })
     )
     .query(async ({ ctx, input }) => {
-      const region = await ctx.prisma.region.findUnique({
+      const region = await ctx.prisma.region.findFirst({
         where: {
-          id: input.id,
+          name: input.name,
+        },
+        include: {
+          wilayas: {
+            select: {
+              name: true,
+              about: true,
+              id: true,
+            },
+          },
         },
       });
       return region;
@@ -77,9 +142,9 @@ export const regionsRouter = createTRPCRouter({
   createMany: privateProcedure.mutation(async ({ ctx }) => {
     await ctx.prisma.region.deleteMany({});
     await ctx.prisma.$executeRaw`ALTER TABLE Region AUTO_INCREMENT = 1;`;
-    const region = await ctx.prisma.region.createMany({
+    const regionsAdded = await ctx.prisma.region.createMany({
       data: regions,
     });
-    return region;
+    return regionsAdded;
   }),
 });

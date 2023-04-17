@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { MapContainer, TileLayer } from "react-leaflet";
+import dynamic from "next/dynamic";
 
+const Map = dynamic(() => import("./Map"), { ssr: false });
 import Section from "./Section";
-import recommend from "../assets/tahwissa/0.jpeg";
-import hotel from "../assets/tahwissa/1.png";
-import rest from "../assets/tahwissa/2.png";
-import event from "../assets/tahwissa/3.png";
+import recommend from "/public/assets/essentials/0.jpeg";
+import hotel from "/public/assets/essentials/1.png";
+import rest from "/public/assets/essentials/2.png";
+import event from "/public/assets/essentials/3.png";
 import { type StaticImageData } from "next/image";
 import { api } from "~/utils/api";
 
@@ -22,31 +23,6 @@ import { api } from "~/utils/api";
 //     });
 //     return images;
 //   }
-
-const Map = ({
-  position,
-}: {
-  position: {
-    lat: number;
-    log: number;
-  };
-}) => {
-  return (
-    <div className="mt-[3.385vw] aspect-[1.9851] w-full">
-      <MapContainer
-        style={{ width: "100%", height: "100%", zIndex: 0 }}
-        center={[position.lat, position.log]}
-        zoom={13}
-        scrollWheelZoom={true}
-      >
-        <TileLayer
-          attribution='Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'
-          url={`https://api.mapbox.com/styles/v1/${process.env.MAPBOX_USERNAME}/${process.env.MAPBOX_STYLE_ID}/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.MAPBOX_ACCESS_TOKEN}`}
-        />
-      </MapContainer>
-    </div>
-  );
-};
 
 const SiteHero = ({
   site,
@@ -262,48 +238,26 @@ const Site = () => {
     { name: "SECURA North Africa", location: "Algiers, 11.22. - 11.24.2022" },
     { name: "SECURA North Africa", location: "Algiers, 11.22. - 11.24.2022" },
   ];
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const site = await api.sites.getSite(1);
-      const path = {
-        value: [
-          `../../assets/tahwissa/Regions/1/${site.wilayaId}/Sites/${site.id}`,
-        ].toString(),
-      };
-      const images = await importAll(
-        require.context(path, false, /\.(png|jpe?g|svg)$/)
-      );
-      site.images = images;
-      setSite(site);
-    };
-    fetchData();
-  }, []);
+  /*
+<SiteHero site={site} />
+          <section id="Map" className="z-0 mt-[7.86vw] ">
+            <h2 className="semi-title">Near {site.name}</h2>
+            <Map position={site.position}></Map>
+          </section>
+*/
 
   return (
     <main className="mx-auto w-[87.1vw]">
       {site === null ? null : (
         <>
-          <SiteHero site={site} />
-          <section id="Map" className="z-0 mt-[7.86vw] ">
-            <h2 className="semi-title">Near {site.name}</h2>
-            <Map position={site.position}></Map>
-          </section>
           <Section
-            id="Recommendations"
             section="Our Recommendations"
             list={listRecommend}
             img={recommend}
           />
-          <Section id="Hotels" section="Hotels" list={listHotels} img={hotel} />
+          <Section section="Hotels" list={listHotels} img={hotel} />
+          <Section section="Restaurants" list={listRest} img={rest} />
           <Section
-            id="Restaurants"
-            section="Restaurants"
-            list={listRest}
-            img={rest}
-          />
-          <Section
-            id="Events"
             section="Happening Right Now"
             list={listEvents}
             img={event}

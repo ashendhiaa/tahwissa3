@@ -55,7 +55,7 @@ const Section = ({
   }, []);
 
   return (
-    <section className="new-section w-full">
+    <section className="w-full">
       <div className="flex items-center">
         <h2 ref={h2} className="semi-title">
           {section}
@@ -192,7 +192,7 @@ const Section = ({
       </div>
       <div className="w-full overflow-hidden">
         <ul
-          className="mt-[4.2317vw] flex gap-[1.2369vw] duration-500 ease-in-out"
+          className="row mt-[4.2317vw] gap-[1.2369vw] duration-500 ease-in-out"
           id={section}
           ref={sectionRef}
         >

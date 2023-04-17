@@ -9,16 +9,24 @@
 }
 
 @layer components {
+  .row {
+    @apply flex flex-row;
+  }
+
+  .col {
+    @apply flex flex-col;
+  }
+
   .nav {
-    @apply hover:text-newBlack flex text-[1.1703vw] font-semibold leading-[1.4304vw] text-[#717272];
+    @apply flex text-[1.1703vw] font-semibold leading-[1.4304vw] text-[#717272] hover:text-newBlack;
   }
 
   .bg-image {
-    @apply min-h-full w-full object-cover;
+    @apply h-[50.130208333333336vw] w-full bg-cover bg-center;
   }
 
   .destination-image {
-    @apply border-newBlack min-h-full rounded-[0.91145vw] border-[0.1145vw] object-cover;
+    @apply min-h-full rounded-[0.91145vw] border-[0.1145vw] border-newBlack object-cover;
   }
 
   .title {
@@ -30,19 +38,19 @@
   }
 
   .med-title {
-    @apply text-newBlack text-[2.864vw] font-bold leading-[2.864vw];
+    @apply text-[2.864vw] font-bold leading-[2.864vw] text-newBlack;
   }
 
   .semi-title {
-    @apply text-newBlack text-[2.34vw] font-bold leading-[2.864vw];
+    @apply text-[2.34vw] font-bold leading-[2.864vw] text-newBlack;
   }
 
-  .new-section {
+  .new-page {
     @apply mt-[8.984375vw];
   }
 
   .card-title {
-    @apply text-newBlack flex text-[1.302vw] font-bold leading-[1.5625vw];
+    @apply flex text-[1.302vw] font-bold leading-[1.5625vw] text-newBlack;
   }
 
   .card-image {
@@ -50,18 +58,30 @@
   }
 
   .card-detail {
-    @apply text-newGrey flex text-[1.1315vw] font-medium leading-[1.3698vw];
+    @apply flex text-[1.1315vw] font-medium leading-[1.3698vw] text-newGrey;
   }
 
   .paragraph {
-    @apply text-newGrey text-[1.69vw] font-normal leading-[2.864vw];
+    @apply text-[1.69vw] font-normal leading-[2.864vw] text-newGrey;
   }
 
   .detail {
-    @apply text-newGrey text-[1.302vw] font-medium leading-[1.5625vw];
+    @apply text-[1.302vw] font-medium leading-[1.5625vw] text-newGrey;
   }
 
   .image {
     @apply min-h-full rounded-[0.52vw] object-cover;
+  }
+
+  .darken {
+    @apply brightness-75;
+  }
+
+  .lighten {
+    @apply fill-gray-300;
+  }
+
+  .redZone {
+    @apply fill-[#FF0000];
   }
 }

@@ -8,14 +8,18 @@ const Navbar = () => {
   const [visible, setVisible] = useState(true);
 
   const handleScroll = () => {
-    const currentScrollPos = window.pageYOffset;
-    setVisible(prevScrollPos > currentScrollPos);
-    setPrevScrollPos(currentScrollPos);
+    if (window) {
+      const currentScrollPos = window.pageYOffset;
+      setVisible(prevScrollPos > currentScrollPos);
+      setPrevScrollPos(currentScrollPos);
+    }
   };
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    if (window) {
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
   }, [prevScrollPos, visible, handleScroll]);
 
   return (
@@ -61,10 +65,10 @@ const Navbar = () => {
         </svg>
       </Link>
       <div className="my-auto ml-[5.2083vw] flex items-center gap-[2.6vw]">
-        <Link className="nav" href="/Explore">
+        <Link className="nav" href="/explore">
           Explore
         </Link>
-        <Link className="nav" href="/Destinations">
+        <Link className="nav" href="/destinations">
           Destinations
         </Link>
         <a className="nav">Interactive Map</a>
@@ -81,9 +85,7 @@ import "~/styles/globals.css";
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <>
-      <Head>
-        <Navbar />
-      </Head>
+      <Navbar />
       <Component {...pageProps} />
     </>
   );
