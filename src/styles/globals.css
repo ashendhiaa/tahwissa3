@@ -9,6 +9,26 @@
 }
 
 @layer components {
+  @-webkit-keyframes moving-svg-path {
+    0% {
+      stroke-dashoffset: 0;
+    }
+
+    100% {
+      stroke-dashoffset: -20;
+    }
+  }
+
+  @keyframes moving-svg-path {
+    0% {
+      stroke-dashoffset: 0;
+    }
+
+    100% {
+      stroke-dashoffset: -20;
+    }
+  }
+
   .row {
     @apply flex flex-row;
   }
@@ -46,7 +66,7 @@
   }
 
   .new-page {
-    @apply mt-[8.984375vw];
+    @apply col gap-[9vw];
   }
 
   .card-title {
@@ -69,6 +89,10 @@
     @apply text-[1.302vw] font-medium leading-[1.5625vw] text-newGrey;
   }
 
+  .description {
+    @apply col gap-[2.34375vw];
+  }
+
   .image {
     @apply min-h-full rounded-[0.52vw] object-cover;
   }
@@ -83,5 +107,47 @@
 
   .redZone {
     @apply fill-[#FF0000];
+  }
+
+  .center {
+    @apply fill-newGrey stroke-newBlack stroke-[12];
+  }
+
+  .blackDot {
+    @apply fill-newBlack;
+  }
+
+  .mapDestination {
+    transition: opacity 0.3s ease;
+    @apply absolute box-border block fill-transparent;
+  }
+
+  .line {
+    stroke-dasharray: 20 20;
+    @apply absolute stroke-newBlack stroke-[6];
+  }
+
+  .lineAnimation .line {
+    -webkit-animation-name: moving-svg-path;
+    animation-name: moving-svg-path;
+    -webkit-animation-duration: 0.2s;
+    animation-duration: 0.2s;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    -webkit-animation-direction: normal;
+    animation-direction: normal;
+    stroke-dasharray: 20 20;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+
+  .lineInactive {
+    opacity: 0.2;
+  }
+
+  .lineAnimation .blackDot {
+    r: 20;
   }
 }

@@ -1,4 +1,6 @@
+import { useDispatch } from "react-redux";
 import React, { useState, useEffect, useRef } from "react";
+import { AppDispatch } from "../store/store";
 
 export const useActions = (
   value: number,
@@ -46,6 +48,8 @@ export const useActions = (
     forward,
   };
 };
+
+export const useAppDispatch = () => useDispatch<AppDispatch>();
 
 export function useStateRef<HTMLElement>(
   initialValue: HTMLElement[] | (() => HTMLElement[])

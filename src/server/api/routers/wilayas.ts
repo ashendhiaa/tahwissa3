@@ -14,8 +14,9 @@ const wilayas = [
     nickname: "Tlemcen",
     about:
       "Historic city with rich heritage, stunning architecture, and vibrant culture. Must-visit destination in northwest Algeria.",
-    description:
-      "A city rich in history, culture, and heritage. Explore ancient ruins, magnificent mosques, and historic landmarks. Visit the grand Tlemcen National Park, admire the stunning architecture of the Great Mosque, and explore the exquisite El Mechouar Palace. Immerse yourself in Berber, Arab, and French influences. Discover local cuisine, music, and traditions. A must-visit destination for history buffs, art enthusiasts, and culture seekers.",
+    description: `A city rich in history, culture, and heritage. Explore ancient ruins, magnificent mosques, and historic landmarks. Visit the grand Tlemcen National Park, admire the stunning architecture of the Great Mosque, and explore the exquisite El Mechouar Palace. Immerse yourself in Berber, Arab, and French influences.
+      
+      Discover local cuisine, music, and traditions. A must-visit destination for history buffs, art enthusiasts, and culture seekers.`,
     weather:
       "Tlemcen's climate is characterized by mild winters and hot summers. Experience the pleasant Mediterranean climate with comfortable temperatures, clear skies, and refreshing breezes. Ideal for outdoor activities, leisurely strolls, and enjoying the picturesque landscapes. The city's climate adds to its charm, making it a perfect destination for year-round travel.",
     transportation: "",

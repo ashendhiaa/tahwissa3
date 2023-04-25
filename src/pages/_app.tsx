@@ -1,4 +1,5 @@
 import { type AppType } from "next/app";
+import { wrapper } from "../store/store";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Head from "next/head";
@@ -91,4 +92,4 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   );
 };
 
-export default api.withTRPC(MyApp);
+export default api.withTRPC(wrapper.withRedux(MyApp));

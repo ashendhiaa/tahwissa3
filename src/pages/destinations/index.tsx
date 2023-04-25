@@ -1,6 +1,7 @@
-import Image from "next/image";
-import { useState, useRef, useCallback } from "react";
-import { api } from "~/utils/api";
+import { useState, useRef, useCallback, useEffect } from "react";
+import { selectRegionsState, getAllRegions } from "../../store/regionsReducer";
+import { useAppDispatch } from "~/hooks";
+import { useSelector } from "react-redux";
 import Link from "next/link";
 
 const Regions = ({ data }: { data: any }) => {
@@ -114,24 +115,23 @@ const Regions = ({ data }: { data: any }) => {
               {data.map((region: any, i: number) => {
                 return (
                   <li
-                    className="box-content aspect-[0.7920792079207921] w-full flex-none overflow-hidden rounded-t-[0.78125vw] "
+                    className="box-content w-full flex-none overflow-hidden rounded-t-[0.78125vw] "
                     key={i}
                   >
-                    <Link
-                      href="/destinations/[region.name]"
-                      as={`/destinations/${region.name.toLowerCase()}`}
-                    >
-                      <div
-                        style={{
-                          backgroundImage: `url('https://ik.imagekit.io/vaqzdpz5y/assets/images/${region.id}/1.png')`,
-                        }}
-                        className="relative h-[21.158854166666664vw] w-full bg-cover bg-center pt-[15.7vw]"
-                      >
-                        <h3 className="text-center text-[2.604166666666667vw] font-extrabold text-white ">
-                          {region.name}
-                        </h3>
-                      </div>
-                      <div className="col h-[11.71875vw] gap-[0.8vw] rounded-b-[0.78125vw] border-2 border-black px-[1.0416666666666665vw] py-[1vw]">
+                    <div>
+                      <Link href={`/destinations/${region.name.toLowerCase()}`}>
+                        <div
+                          style={{
+                            backgroundImage: `url('https://ik.imagekit.io/vaqzdpz5y/assets/images/${region.id}/1.png')`,
+                          }}
+                          className="relative h-[21.158854166666664vw] w-full bg-cover bg-center pt-[15.7vw]"
+                        >
+                          <h3 className="text-center text-[2.604166666666667vw] font-extrabold text-white ">
+                            {region.name}
+                          </h3>
+                        </div>
+                      </Link>
+                      <div className="col gap-[0.8vw] rounded-b-[0.78125vw] border-2 border-black px-[1.0416666666666665vw] py-[1.5625vw]">
                         <ul>
                           {region.wilayas.map((wilaya: any, i: number) => {
                             if (region.wilayas.length === i + 1)
@@ -156,7 +156,7 @@ const Regions = ({ data }: { data: any }) => {
                           {region.about}
                         </p>
                       </div>
-                    </Link>
+                    </div>
                   </li>
                 );
               })}
@@ -802,13 +802,6 @@ const Regions = ({ data }: { data: any }) => {
 const DestinationCard = ({ region }: { region: any }) => {
   const algeriaRef = useCallback((node: SVGSVGElement) => {
     if (node !== null) {
-      console.log(
-        `${region.name} is ${
-          document.getElementById(`${region.name}#${region.id - 1}`)
-            ? "true"
-            : "false"
-        }`
-      );
       document
         .getElementById(`${region.name}#${region.id - 1}`)
         ?.classList.add("redZone");
@@ -937,9 +930,10 @@ const DestinationCard = ({ region }: { region: any }) => {
 };
 
 const Destinations = () => {
-  const { data, isLoading } = api.regions.getAll.useQuery();
+  const dispatch = useAppDispatch();
 
-  if (!data || isLoading) return <div>Loading...</div>;
+  const regions = useSelector(selectRegionsState);
+  dispatch(getAllRegions());
 
   return (
     <main>
@@ -949,12 +943,12 @@ const Destinations = () => {
           <h2 className="bg-semi-title text-white">Destinations</h2>
         </div>
       </header>
-      <Regions data={data} />
-      <div className="new-page col mx-auto w-[87.1vw]">
+      <Regions data={regions} />
+      <div className="new-page mx-auto mt-[9vw] w-[87.1vw]">
         <div className="col items-start">
           <h2 className="semi-title">Explore Algeria by region</h2>
           <div className=" mt-[2.864583333333333vw] flex flex-wrap justify-start gap-[1.171875vw]">
-            {data.map((region: any) => (
+            {regions.map((region: any) => (
               <DestinationCard key={region.id} region={region} />
             ))}
           </div>
