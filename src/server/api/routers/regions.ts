@@ -89,8 +89,8 @@ const regions = [
 ];
 
 export const regionsRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.region.findMany({
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    const regions = await ctx.prisma.region.findMany({
       include: {
         wilayas: {
           select: {
@@ -101,6 +101,7 @@ export const regionsRouter = createTRPCRouter({
         },
       },
     });
+    return regions;
   }),
   getOne: publicProcedure
     .input(

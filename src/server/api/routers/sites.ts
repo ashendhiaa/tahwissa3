@@ -24,6 +24,33 @@ export const sitesRouter = createTRPCRouter({
       });
       return site;
     }),
+  getTop: publicProcedure.query(async ({ ctx }) => {
+    const sites = await ctx.prisma.site.findMany({
+      orderBy: {
+        visit: "desc",
+      },
+      take: 6,
+    });
+    return sites;
+  }),
+  getTopByWilaya: publicProcedure
+    .input(
+      z.object({
+        wilayaId: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const sites = await ctx.prisma.site.findMany({
+        where: {
+          wilayaId: input.wilayaId,
+        },
+        orderBy: {
+          visit: "desc",
+        },
+        take: 6,
+      });
+      return sites;
+    }),
   createSite: privateProcedure
     .input(
       z.object({
@@ -33,8 +60,7 @@ export const sitesRouter = createTRPCRouter({
         link: z.string(),
         price: z.number(),
         wilayaId: z.number(),
-        longitude: z.number(),
-        latitude: z.number(),
+        position: z.array(z.number()),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -46,8 +72,7 @@ export const sitesRouter = createTRPCRouter({
           link: input.link,
           price: input?.price || 0,
           wilayaId: input.wilayaId,
-          longitude: input.longitude,
-          latitude: input.latitude,
+          position: input.position,
         },
       });
       return site;

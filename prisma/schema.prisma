@@ -27,15 +27,17 @@ model Region {
 }
 
 model Wilaya {
-    id             Int    @id @default(autoincrement())
-    name           String @db.VarChar(60)
-    nickname       String @db.VarChar(60)
-    about          String @db.VarChar(130)
-    description    String @db.VarChar(600)
-    weather        String @db.VarChar(400)
-    transportation String @db.VarChar(270)
+    id             Int     @id @default(autoincrement())
+    name           String  @db.VarChar(60)
+    nickname       String  @db.VarChar(60)
+    about          String  @db.VarChar(130)
+    description    String  @db.VarChar(600)
+    weather        String  @db.VarChar(400)
+    transportation String  @db.VarChar(270)
+    special        Boolean
+    food           Json
     regionId       Int
-    region         Region @relation(fields: [regionId], references: [id])
+    region         Region  @relation(fields: [regionId], references: [id])
     sites          Site[]
 }
 
@@ -46,8 +48,7 @@ model Site {
     visit       Int
     link        String @db.VarChar(1024)
     price       Int
-    longitude   Float
-    latitude    Float
+    position    Json
     wilayaId    Int
     wilaya      Wilaya @relation(fields: [wilayaId], references: [id])
 }

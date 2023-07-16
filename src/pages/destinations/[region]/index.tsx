@@ -1,13 +1,17 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { selectRegionsState, getAllRegions } from "../../store/regionsReducer";
+import {
+  selectRegionsState,
+  getAllRegions,
+} from "../../../store/regionsReducer";
 import { useAppDispatch } from "~/hooks";
 import { useStateRef } from "~/hooks";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
 import * as d3 from "d3";
-import { unknown } from "zod";
+import WilayaCard from "~/components/WilayaCard";
+import Wilayas from "~/components/Wilayas";
 
 const WilayasMap = ({ region }: { region: any }) => {
   const [wilayas, setWilayas] = useState<HTMLElement[]>([]);
@@ -162,7 +166,9 @@ const WilayasMap = ({ region }: { region: any }) => {
                     key={i}
                   >
                     <div>
-                      <Link href="/destinations">
+                      <Link
+                        href={`/destinations/${region.name.toLowerCase()}/${wilaya.name.toLowerCase()}`}
+                      >
                         <div
                           style={{
                             backgroundImage: `url('https://ik.imagekit.io/vaqzdpz5y/assets/images/${region.id}/${wilaya.id}/0.png')`,
@@ -316,49 +322,6 @@ const WilayasMap = ({ region }: { region: any }) => {
         </div>
       </div>
       <div id="region" className="w-[51.5625vw]"></div>
-    </div>
-  );
-};
-
-const WilayaCard = ({
-  regionId,
-  wilaya,
-  svgMap,
-}: {
-  regionId: number;
-  wilaya: any;
-  svgMap: string;
-}) => {
-  const wilayaRef = useCallback((node: HTMLDivElement) => {
-    if (node !== null) {
-      node.innerHTML = svgMap;
-      if (node.childNodes[0]?.firstChild?.childNodes !== undefined) {
-        const children = node.childNodes[0]?.firstChild
-          ?.childNodes as unknown as HTMLElement[];
-        children!.forEach((child) => {
-          if (child.id === `${wilaya.id}`) {
-            child.classList.add("redZone");
-          }
-        });
-      }
-    }
-  }, []);
-
-  return (
-    <div
-      style={{
-        backgroundImage: `url('https://ik.imagekit.io/vaqzdpz5y/assets/images/${regionId}/${wilaya.id}/0.png')`,
-      }}
-      className="aspect-[0.99644] w-[20.833333333333336vw] rounded-xl border-[2px] border-newBlack bg-cover bg-center duration-700 ease-in-out "
-    >
-      <div
-        className="mx-auto mt-[5.924479166666666vw] w-[15.104166666666666vw]"
-        id={`${wilaya.name}`}
-        ref={wilayaRef}
-      ></div>
-      <h2 className="mt-2 w-full text-center text-[1.8229166666666667vw] font-extrabold text-white">
-        {wilaya.name}
-      </h2>
     </div>
   );
 };
@@ -827,7 +790,7 @@ const Description = ({ region }: { region: any }) => {
         <h2 className="semi-title">Description</h2>
         <p className="paragraph">{breakLine(region!.description)}</p>
       </div>
-      <div className="col h-[30.46875vw] w-[20.377604166666664vw] gap-[0.8463541666666666vw] rounded-[0.78125vw] border-2 bg-[rgba(210,212,212,0.15)]">
+      <div className="col sticky top-0 h-[30.46875vw] w-[20.377604166666664vw] gap-[0.8463541666666666vw] rounded-[0.78125vw] border-2 bg-[rgba(210,212,212,0.15)]">
         <svg
           ref={regionRef}
           className="relative mx-auto mt-[5.338541666666666vw] w-[14.057942708333334vw]"
@@ -952,45 +915,15 @@ const Description = ({ region }: { region: any }) => {
   );
 };
 
-const Wilayas = ({ region }: { region: any }) => {
-  const [svgMap, setSvgMap] = useState<string>("");
-  useEffect(() => {
-    const fetching = async () => {
-      const response = await fetch(
-        `https://ik.imagekit.io/vaqzdpz5y/assets/images/${region!.id}/2.svg`
-      );
-      const svgContent = await response.text();
-      setSvgMap(svgContent);
-    };
-    fetching();
-  }, []);
-
-  if (!svgMap) return null;
-
-  return (
-    <section id="explore wilayas" className="col items-start">
-      <h2 className="semi-title">Explore {region.name} by Wilaya</h2>
-      <div className=" mt-[2.864583333333333vw] flex flex-wrap justify-start gap-[1.171875vw]">
-        {region?.wilayas.map((wilaya: any) => (
-          <WilayaCard
-            key={wilaya.id}
-            regionId={region!.id}
-            wilaya={wilaya}
-            svgMap={svgMap}
-          />
-        ))}
-      </div>
-    </section>
-  );
-};
-
 const Region = () => {
   const dispatch = useAppDispatch();
   const regions = useSelector(selectRegionsState);
   dispatch(getAllRegions());
 
   const router = useRouter();
-  const regionQuery = router.query.slug;
+  const path = router.asPath;
+  console.log(path);
+  const regionQuery = router.query.region;
 
   if (typeof regionQuery !== "string") {
     return null;
@@ -1030,7 +963,7 @@ const Region = () => {
       <WilayasMap region={region} />
       <div className="new-page mx-auto mt-[9vw] w-[87.1vw]">
         <Description region={region} />
-        <Wilayas region={region} />
+        <Wilayas region={region} wilayaId={-1} />
       </div>
     </main>
   );

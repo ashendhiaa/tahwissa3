@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import React, { useState, useEffect, useRef } from "react";
+import Slider from "react-slick";
 import { AppDispatch } from "../store/store";
 
 export const useActions = (
@@ -42,6 +43,48 @@ export const useActions = (
   return {
     ref,
     currentIndex,
+    goBack,
+    back,
+    goForward,
+    forward,
+  };
+};
+
+export const useSlider = (number: number) => {
+  const sliderRef = useRef<Slider>(null);
+
+  const [back, setBack] = useState(false);
+  const [forward, setForward] = useState(true);
+
+  const goBack = () => {
+    if (sliderRef.current) {
+      sliderRef.current.slickPrev();
+    }
+  };
+
+  const afterChange = (current: number) => {
+    if (current === 0) {
+      setBack(false);
+    } else {
+      setBack(true);
+    }
+    // @ts-ignore
+    if (current === sliderRef.current?.innerSlider?.state.slideCount - number) {
+      setForward(false);
+    } else {
+      setForward(true);
+    }
+  };
+
+  const goForward = () => {
+    if (sliderRef.current) {
+      sliderRef.current.slickNext();
+    }
+  };
+
+  return {
+    sliderRef,
+    afterChange,
     goBack,
     back,
     goForward,

@@ -70,7 +70,7 @@
   }
 
   .card-title {
-    @apply flex text-[1.302vw] font-bold leading-[1.5625vw] text-newBlack;
+    @apply truncate text-[1.302vw] font-bold leading-[1.5625vw] text-newBlack;
   }
 
   .card-image {
@@ -78,7 +78,7 @@
   }
 
   .card-detail {
-    @apply flex text-[1.1315vw] font-medium leading-[1.3698vw] text-newGrey;
+    @apply truncate text-[1.1315vw] font-medium leading-[1.3698vw] text-newGrey;
   }
 
   .paragraph {
@@ -110,7 +110,7 @@
   }
 
   .center {
-    @apply fill-newGrey stroke-newBlack stroke-[12];
+    @apply fill-newBlack;
   }
 
   .blackDot {
@@ -149,5 +149,42 @@
 
   .lineAnimation .blackDot {
     r: 20;
+  }
+
+  .line2 {
+    stroke-dasharray: 5 5;
+    @apply absolute stroke-newBlack stroke-[2];
+  }
+
+  .lineAnimation2 .line2 {
+    -webkit-animation-name: moving-svg-path;
+    animation-name: moving-svg-path;
+    -webkit-animation-duration: 0.2s;
+    animation-duration: 0.2s;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    -webkit-animation-direction: normal;
+    animation-direction: normal;
+    stroke-dasharray: 5 5;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+
+  .lineAnimation2 .blackDot {
+    r: 7;
+  }
+
+  .svg {
+    @apply relative mx-auto w-[14.057942708333334vw];
+  }
+
+  .slick-list {
+    @apply w-full overflow-hidden;
+  }
+
+  .slick-track {
+    @apply flex gap-[1.2369vw];
   }
 }

@@ -48,8 +48,17 @@ export const getAllRegions = () => {
     const { regions } = getState();
     const { data } = api.regions.getAll.useQuery(void [], {
       enabled: !(regions.length > 0),
+      trpc: {
+        ssr: true,
+      },
     });
     const regionsData = data;
+    dispatch(setRegions(regionsData));
+  };
+};
+
+export const setAllRegions = (regionsData: RegionState[]) => {
+  return (dispatch: any) => {
     dispatch(setRegions(regionsData));
   };
 };

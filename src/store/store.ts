@@ -3,12 +3,14 @@ import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 
 import regionsReducer from "./regionsReducer";
+import wilayasReducer from "./wilayasReducer";
 import { createWrapper } from "next-redux-wrapper";
 
 const store = () =>
   configureStore({
     reducer: {
       regions: regionsReducer,
+      wilayas: wilayasReducer,
     },
     devTools: true,
   });

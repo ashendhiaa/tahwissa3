@@ -2,7 +2,7 @@ import { useActions } from "../../hooks";
 import ScrollContainer from "react-indiana-drag-scroll";
 import Image, { type StaticImageData } from "next/image";
 
-import Section from "../components/Section";
+import Section from "~/components/Section";
 
 import home from "/public/assets/home.jpg";
 import about from "/public/assets/about-image.png";
