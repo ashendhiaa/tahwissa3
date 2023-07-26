@@ -5,12 +5,10 @@ import {
   getAllRegions,
 } from "../../../store/regionsReducer";
 import { useAppDispatch } from "~/hooks";
-import { useStateRef } from "~/hooks";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
 import * as d3 from "d3";
-import WilayaCard from "~/components/WilayaCard";
 import Wilayas from "~/components/Wilayas";
 
 const WilayasMap = ({ region }: { region: any }) => {
@@ -921,8 +919,6 @@ const Region = () => {
   dispatch(getAllRegions());
 
   const router = useRouter();
-  const path = router.asPath;
-  console.log(path);
   const regionQuery = router.query.region;
 
   if (typeof regionQuery !== "string") {

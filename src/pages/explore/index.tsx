@@ -1,19 +1,21 @@
-import { useActions } from "../../hooks";
+import { useActions, useAppDispatch } from "../../hooks";
 import ScrollContainer from "react-indiana-drag-scroll";
 import Image, { type StaticImageData } from "next/image";
-
-import Section from "~/components/Section";
 
 import home from "/public/assets/home.jpg";
 import about from "/public/assets/about-image.png";
 import mosta from "/public/assets/mostaganem.jpg";
-import must from "/public/assets/essentials/0.jpeg";
 import poster from "/public/assets/startup.jpg";
 import sqrposter from "/public/assets/star.jpg";
 import gallery1 from "/public/assets/gallery1.png";
 import gallery2 from "/public/assets/gallery2.png";
 import gallery3 from "/public/assets/gallery3.png";
 import gallery4 from "/public/assets/gallery4.png";
+import { getAllRegions, selectRegionsState } from "~/store/regionsReducer";
+import { useSelector } from "react-redux";
+import { api } from "~/utils/api";
+import { SectionPlaces } from "~/components/Section";
+import { Site } from "@prisma/client";
 
 // ? This is the Card that defines one Wilaya and its images
 
@@ -275,7 +277,7 @@ const Gallery = ({ gallery }: { gallery: StaticImageData[] }) => {
   );
 };
 
-const Explore = () => {
+const Explore = ({ sites }: { sites: Site[] }) => {
   const listWilayas = [
     "Mostaganem",
     "Mostaganem",
@@ -333,7 +335,13 @@ const Explore = () => {
           />
         </section>
         <TopSection list={listWilayas} img={mosta} />
-        <Section section="Must Sees" list={listMust} img={must} />
+        {/* TODO:
+                <SectionPlaces
+          data={sites}
+          section="Must Sees"
+          wilaya={wilaya}
+          regionId={region.id}
+        />*/}
       </div>
       <Happening poster={poster} sqrposter={sqrposter} />
       <Gallery gallery={listGallery} />
@@ -341,4 +349,16 @@ const Explore = () => {
   );
 };
 
-export default Explore;
+const FetcherComponent = () => {
+  const dispatch = useAppDispatch();
+  dispatch(getAllRegions());
+  const regions = useSelector(selectRegionsState);
+
+  const topSites = api.sites.getTop.useQuery().data;
+
+  if (!regions || !topSites) return null;
+
+  return <Explore sites={topSites} />;
+};
+
+export default FetcherComponent;

@@ -3,8 +3,9 @@ import { selectRegionsState, getAllRegions } from "../../store/regionsReducer";
 import { useAppDispatch } from "~/hooks";
 import { useSelector } from "react-redux";
 import Link from "next/link";
+import { Region } from "@prisma/client";
 
-const Regions = ({ data }: { data: any }) => {
+const Regions = ({ data }: { data: Region[] }) => {
   const [regions, setRegions] = useState<HTMLElement[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [left, setLeft] = useState(0);
@@ -799,7 +800,7 @@ const Regions = ({ data }: { data: any }) => {
   );
 };
 
-const DestinationCard = ({ region }: { region: any }) => {
+const DestinationCard = ({ region }: { region: Region }) => {
   const algeriaRef = useCallback((node: SVGSVGElement) => {
     if (node !== null) {
       document

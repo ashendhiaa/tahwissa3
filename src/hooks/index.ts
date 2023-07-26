@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import React, { useState, useEffect, useRef } from "react";
 import Slider from "react-slick";
 import { AppDispatch } from "../store/store";
+import Glide, { Options } from "@glidejs/glide";
 
 export const useActions = (
   value: number,
@@ -89,6 +90,7 @@ export const useSlider = (number: number) => {
     back,
     goForward,
     forward,
+    setForward,
   };
 };
 

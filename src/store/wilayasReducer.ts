@@ -48,12 +48,11 @@ export const { updateWilaya, setWilayas } = wilayasSlice.actions;
 export const selectWilayasState = (state: AppState) => state.wilayas;
 
 export const getRegionWilayas = (regionId: number) => {
-  return (dispatch: any, getState: () => AppState) => {
-    const { wilayas } = getState();
+  return (dispatch: any) => {
     const { data } = api.wilayas.getAll.useQuery(
       { id: regionId },
       {
-        enabled: !(wilayas.length > 0),
+        enabled: true,
       }
     );
     const regionsWilayasData = data;

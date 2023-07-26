@@ -1,6 +1,5 @@
 import { type AppType } from "next/app";
 import { wrapper } from "../store/store";
-import App from "next/app";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
@@ -90,11 +89,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       <Component {...pageProps} />
     </>
   );
-};
-
-MyApp.getInitialProps = async (appContext) => {
-  const appProps = await App.getInitialProps(appContext as any);
-  return { ...appProps };
 };
 
 export default api.withTRPC(wrapper.withRedux(MyApp));

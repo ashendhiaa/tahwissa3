@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import { useEffect } from "react";
 import { api, setToken } from "~/utils/api";
-import Explore from "./explore";
+import FetcherComponent from "./explore";
 
 const Home: NextPage = () => {
   const { mutate: loginUser } = api.users.login.useMutation({
@@ -19,7 +19,7 @@ const Home: NextPage = () => {
   return (
     <>
       <main className="flex min-h-screen flex-col items-center justify-center">
-        <Explore />
+        <FetcherComponent />
       </main>
     </>
   );

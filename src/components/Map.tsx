@@ -15,7 +15,14 @@ export const LazyTileLayer = dynamic(
   }
 );
 
-const Map = ({ center }: { center: [number, number] }) => {
+export const LazyChangeView = dynamic(
+  async () => (await import("./ChangeView")).default,
+  {
+    ssr: false,
+  }
+);
+
+const Map = ({ center, zoom }: { center: [number, number]; zoom: number }) => {
   return (
     <div className="aspect-[1.9851] w-full">
       <LazyMapContainer
@@ -25,13 +32,14 @@ const Map = ({ center }: { center: [number, number] }) => {
           zIndex: 0,
         }}
         center={[center[1], center[0]]}
-        zoom={13}
+        zoom={zoom}
         scrollWheelZoom={true}
       >
         <LazyTileLayer
           attribution='Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'
           url={`https://api.mapbox.com/styles/v1/${process.env.NEXT_PUBLIC_MAPBOX_USERNAME}/${process.env.NEXT_PUBLIC_MAPBOX_STYLE_ID}/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}`}
         />
+        <LazyChangeView center={center} zoom={zoom} />
       </LazyMapContainer>
     </div>
   );

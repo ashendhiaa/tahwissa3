@@ -1,5 +1,9 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
-import SectionPlaces from "~/components/SectionPlaces";
+import React, { useState, useCallback, useEffect } from "react";
+import {
+  SectionPlaces,
+  SectionHotels,
+  SectionRestaurants,
+} from "~/components/Section";
 import { useSelector } from "react-redux";
 import { selectRegionsState, getAllRegions } from "~/store/regionsReducer";
 import { selectWilayasState, getRegionWilayas } from "~/store/wilayasReducer";
@@ -9,15 +13,14 @@ import Map from "~/components/Map";
 
 import * as d3 from "d3";
 import { api } from "~/utils/api";
-import SectionLodging from "~/components/SectionLodging";
-import WilayaCard from "~/components/WilayaCard";
 import Wilayas from "~/components/Wilayas";
 
 const fetchDestination = async (name: string) => {
   const response = await fetch(
     `https://api.mapbox.com/geocoding/v5/mapbox.places/${name}.json?country=dz&access_token=${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}`
   );
-  return response.json();
+  const data = await response.json();
+  return data;
 };
 
 const Description = ({
@@ -251,7 +254,7 @@ const Description = ({
       };
       fetchDescription();
     }
-  }, []);
+  }, [wilaya]);
 
   useEffect(() => {
     const fetching = async () => {
@@ -402,8 +405,8 @@ const Main = ({
     wilayaId: wilaya.id,
   }).data;
 
-  const [hotels, setHotels] = useState(null);
-  const [restaurants, setRestaurants] = useState(null);
+  const [hotels, setHotels] = useState([]);
+  const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -455,8 +458,6 @@ const Main = ({
             console.log("Unauthorized Access");
           }
         });
-
-        setHotels(hotelsResults as any);
 
         // get the restaurants
 
@@ -513,18 +514,28 @@ const Main = ({
           }
         });
 
+        setHotels(hotelsResults as any);
+
         setRestaurants(restaurantsResults as any);
+
+        console.log("done");
       } catch (error) {
         console.log("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [wilayaCoords]);
 
-  console.log(hotels);
+  if (!top) {
+    return null;
+  }
 
-  if (!hotels) {
+  if (hotels?.length === 0) {
+    return null;
+  }
+
+  if (restaurants.length === 0) {
     return null;
   }
 
@@ -536,7 +547,7 @@ const Main = ({
         className="col mt-[0.6510416666666667vw] gap-[3.3854166666666665vw]"
       >
         <h2 className="semi-title">Explore {wilaya.name}</h2>
-        <Map center={wilayaCoords} />
+        <Map center={wilayaCoords} zoom={13} />
       </section>
       <SectionPlaces
         data={top}
@@ -544,7 +555,7 @@ const Main = ({
         wilaya={wilaya}
         regionId={region.id}
       />
-      <SectionLodging data={hotels} section="Hotels" wilayaName={wilaya.name} />
+      <SectionHotels data={hotels} section="Hotels" wilayaName={wilaya.name} />
       <section id="Gastronomy" className="col gap-[2.864583333333333vw]">
         <h2 className="semi-title">Gastronomy</h2>
         <div className="row w-full flex-wrap gap-[1.8229166666666667vw]">
@@ -575,7 +586,7 @@ const Main = ({
           })}
         </div>
       </section>
-      <SectionLodging
+      <SectionRestaurants
         data={restaurants}
         section="Restaurants"
         wilayaName={wilaya.name}
@@ -587,22 +598,20 @@ const Main = ({
 
 const Wilaya = ({ region, wilayaName }: any) => {
   const dispatch = useAppDispatch();
-  dispatch(getAllRegions());
 
-  const wilayas = useSelector(selectWilayasState);
   dispatch(getRegionWilayas(region!.id));
+  const wilayas = useSelector(selectWilayasState);
   const wilaya = wilayas.find((wilaya) => {
     return wilaya.name === wilayaName;
   });
 
-  const [wilayaCoords, setWilayaCoords] = useState<any>(null);
+  const [wilayaCoords, setWilayaCoords] = useState<[number, number]>([0, 0]);
 
   useEffect(() => {
     const fetchCoordinates = async (destination: string) => {
       const wilayaResponse = await fetchDestination(destination);
-      const wilayaCoords = wilayaResponse.features[0].center;
-
-      setWilayaCoords(wilayaCoords);
+      const wilayaCoordsResponse = wilayaResponse.features[0].center;
+      setWilayaCoords(wilayaCoordsResponse);
     };
     if (wilaya?.name) {
       fetchCoordinates(wilaya!.name);
@@ -653,7 +662,7 @@ const FetcherComponent = () => {
 
   const { query } = useRouter();
 
-  const { region, wilaya } = query;
+  let { region, wilaya } = query;
 
   if (typeof region !== "string" || typeof wilaya !== "string") {
     return null;

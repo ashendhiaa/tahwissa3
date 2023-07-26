@@ -10,6 +10,10 @@ const config = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  images: {
+    loader: "imgix",
+    path: "https://ik.imagekit.io/vaqzdpz5y/",
+  },
 
   /**
    * If you have the "experimental: { appDir: true }" setting enabled, then you

@@ -24,13 +24,13 @@ export const wilayasRouter = createTRPCRouter({
   getOne: publicProcedure
     .input(
       z.object({
-        id: z.number(),
+        name: z.string(),
       })
     )
     .query(async ({ ctx, input }) => {
       const wilaya = await ctx.prisma.wilaya.findUnique({
         where: {
-          id: input.id,
+          name: input.name,
         },
       });
       return wilaya;
