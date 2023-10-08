@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import { selectRegionsState, getAllRegions } from "../../store/regionsReducer";
 import { useAppDispatch } from "~/hooks";
 import { useSelector } from "react-redux";

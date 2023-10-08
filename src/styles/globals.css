@@ -184,6 +184,13 @@
     @apply relative mx-auto w-[14.057942708333334vw];
   }
 
+  .zoom {
+    @apply transition-all duration-700 hover:scale-110  hover:ease-in-out;
+  }
+  .zoom h3 {
+    @apply hover:scale-100;
+  }
+
   .slick-list {
     @apply w-full overflow-hidden;
   }

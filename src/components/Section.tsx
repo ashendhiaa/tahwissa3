@@ -1,6 +1,7 @@
-import Card from "./Card";
-import CardLodging from "./CardLodging";
+import { Site, Wilaya } from "@prisma/client";
+import { Card, CardSpecial, CardLodging } from "./Card";
 import Carousel from "./Carousel";
+import { RegionWithWilayas } from "~/types";
 
 export const SectionPlaces = ({
   section,
@@ -9,8 +10,8 @@ export const SectionPlaces = ({
   regionId,
 }: {
   section: string;
-  data: any;
-  wilaya: any;
+  data: Site[];
+  wilaya: Wilaya;
   regionId: number;
 }) => {
   if (!data) return null;
@@ -23,24 +24,73 @@ export const SectionPlaces = ({
         perView={4}
         total={data.length}
       >
-        {data.map(
-          (
-            item: { name: any; id: any },
-            index: React.Key | null | undefined
-          ) => {
-            return (
-              <Card
-                key={index}
-                element={{
-                  name: item.name,
-                  location: `${wilaya.name}, ${wilaya.name} province`,
-                }}
-                img={`https://ik.imagekit.io/vaqzdpz5y/assets/images/${regionId}/${wilaya.id}/Sites/${item.id}/images/1.png`}
-              />
-            );
-          }
-        )}
+        {data.map((item, index: React.Key | null | undefined) => {
+          return (
+            <Card
+              key={index}
+              element={{
+                name: item.name,
+                location: `${wilaya.name}, ${wilaya.name} province`,
+              }}
+              img={`https://ik.imagekit.io/vaqzdpz5y/assets/images/${regionId}/${wilaya.id}/${item.id}/1.png`}
+            />
+          );
+        })}
       </Carousel>
+    </section>
+  );
+};
+
+export const TopSites = ({
+  section,
+  data,
+  regions,
+}: {
+  section: string;
+  data: Site[];
+  regions: RegionWithWilayas[];
+}) => {
+  return (
+    <section id="Must">
+      <Carousel
+        element="must"
+        section={section}
+        perView={4}
+        total={data.length}
+      >
+        {data.map((item, index: React.Key | null | undefined) => {
+          let regionFound: RegionWithWilayas | undefined;
+          let wilaya: any;
+          let condition = false;
+
+          regions.map((region) => {
+            for (const regionWilaya of region.wilayas) {
+              if (regionWilaya.id === item.wilayaId && !condition) {
+                regionFound = region;
+                wilaya = regionWilaya;
+                condition = true;
+                break;
+              }
+            }
+          });
+
+          return (
+            <CardSpecial
+              region={regionFound!}
+              wilaya={wilaya!}
+              key={index}
+              element={{
+                name: item.name,
+                location: `${wilaya!.name}, ${wilaya!.name} province`,
+              }}
+              img={`https://ik.imagekit.io/vaqzdpz5y/assets/images/${regionFound?.id!}/${
+                wilaya!.id
+              }/${item.id}/1.png`}
+            />
+          );
+        })}
+      </Carousel>
+      {/**/}
     </section>
   );
 };

@@ -14,6 +14,7 @@ import Map from "~/components/Map";
 import * as d3 from "d3";
 import { api } from "~/utils/api";
 import Wilayas from "~/components/Wilayas";
+import { RegionWithWilayas, WilayaWithSites } from "~/types";
 
 const fetchDestination = async (name: string) => {
   const response = await fetch(
@@ -28,9 +29,9 @@ const Description = ({
   regionId,
   wilayas,
 }: {
-  wilaya: any;
+  wilaya: WilayaWithSites;
   regionId: number;
-  wilayas: any[];
+  wilayas: WilayaWithSites[];
 }) => {
   const [description, setDescription] = useState<any[]>([]);
 
@@ -396,9 +397,9 @@ const Main = ({
   region,
   wilayaCoords,
 }: {
-  wilaya: any;
-  wilayas: any;
-  region: any;
+  wilaya: WilayaWithSites;
+  wilayas: WilayaWithSites[];
+  region: RegionWithWilayas;
   wilayaCoords: [number, number];
 }) => {
   const top = api.sites.getTopByWilaya.useQuery({
@@ -559,31 +560,32 @@ const Main = ({
       <section id="Gastronomy" className="col gap-[2.864583333333333vw]">
         <h2 className="semi-title">Gastronomy</h2>
         <div className="row w-full flex-wrap gap-[1.8229166666666667vw]">
-          {wilaya.food.map((food: any, index: number) => {
-            return (
-              <div
-                key={index}
-                className="row mb-4 w-[42.3828125vw] gap-[1.8229166666666667vw]"
-              >
+          {Array.isArray(wilaya.food) &&
+            wilaya.food.map((food: any, index: number) => {
+              return (
                 <div
-                  style={{
-                    backgroundImage: `url(${`https://ik.imagekit.io/vaqzdpz5y/assets/images/${
-                      region.id
-                    }/${wilaya.id}/food${index + 1}.png`})`,
-                  }}
-                  className="h-[20.833333333333336vw] w-[20.833333333333336vw] flex-none rounded-[0.7161458333333333vw] bg-cover bg-center"
-                />
-                <div className="col items-start gap-[1.5625vw]">
-                  <h3 className="text-[1.5625vw] font-bold text-newBlack">
-                    {food.name}
-                  </h3>
-                  <p className="text-[1.0416666666666665vw] leading-[1.953125vw] text-newGrey">
-                    {food.description}
-                  </p>
+                  key={index}
+                  className="row mb-4 w-[42.3828125vw] gap-[1.8229166666666667vw]"
+                >
+                  <div
+                    style={{
+                      backgroundImage: `url(${`https://ik.imagekit.io/vaqzdpz5y/assets/images/${
+                        region.id
+                      }/${wilaya.id}/food${index + 1}.png`})`,
+                    }}
+                    className="h-[20.833333333333336vw] w-[20.833333333333336vw] flex-none rounded-[0.7161458333333333vw] bg-cover bg-center"
+                  />
+                  <div className="col items-start gap-[1.5625vw]">
+                    <h3 className="text-[1.5625vw] font-bold text-newBlack">
+                      {food.name}
+                    </h3>
+                    <p className="text-[1.0416666666666665vw] leading-[1.953125vw] text-newGrey">
+                      {food.description}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
       </section>
       <SectionRestaurants
@@ -596,7 +598,13 @@ const Main = ({
   );
 };
 
-const Wilaya = ({ region, wilayaName }: any) => {
+const Wilaya = ({
+  region,
+  wilayaName,
+}: {
+  region: RegionWithWilayas;
+  wilayaName: string;
+}) => {
   const dispatch = useAppDispatch();
 
   dispatch(getRegionWilayas(region!.id));
@@ -605,7 +613,7 @@ const Wilaya = ({ region, wilayaName }: any) => {
     return wilaya.name === wilayaName;
   });
 
-  const [wilayaCoords, setWilayaCoords] = useState<[number, number]>([0, 0]);
+  const [wilayaCoords, setWilayaCoords] = useState<[number, number]>();
 
   useEffect(() => {
     const fetchCoordinates = async (destination: string) => {

@@ -2,21 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import { AppState } from "./store";
 import { HYDRATE } from "next-redux-wrapper";
 import { api } from "~/utils/api";
+import { WilayaWithSites } from "~/types";
 
 // Type for our state
-export interface WilayaState {
-  id: number;
-  name: string;
-  nickname: string;
-  about: string;
-  description: string;
-  weather: string;
-  tranportation: string;
-  regionId: number;
-  sites: any[];
-}
 
-const initialState: WilayaState[] = [];
+const initialState: WilayaWithSites[] = [];
 
 const wilayasSlice = createSlice({
   name: "wilayas",
@@ -60,7 +50,7 @@ export const getRegionWilayas = (regionId: number) => {
   };
 };
 
-export const modifyWilaya = (changedRegion: WilayaState) => {
+export const modifyWilaya = (changedRegion: WilayaWithSites) => {
   return async (dispatch: any) => {
     /*const newAnecdote = await 
     anecdoteService.updateOld(

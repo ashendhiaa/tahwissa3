@@ -11,6 +11,8 @@ import {
 } from "~/components/Section";
 import { useAppDispatch } from "~/hooks";
 import { getAllRegions, selectRegionsState } from "~/store/regionsReducer";
+import { RegionWithWilayas } from "~/types";
+import { Site, Wilaya } from "@prisma/client";
 
 const fetchDestination = async (name: string) => {
   const response = await fetch(
@@ -20,7 +22,7 @@ const fetchDestination = async (name: string) => {
   return data;
 };
 
-const SiteHero = ({ site, images }: { site: any; images: any }) => {
+const SiteHero = ({ site, images }: { site: Site; images: any }) => {
   return (
     <section id="SiteHero">
       <header className="mb-[3.3854vw] mt-[11.71875vw] grid place-items-center">
@@ -72,37 +74,37 @@ const SiteHero = ({ site, images }: { site: any; images: any }) => {
             <path
               d="M29.7914 12.8001C32.903 12.8001 35.4255 10.3824 35.4255 7.40006C35.4255 4.41769 32.903 2 29.7914 2C26.6797 2 24.1572 4.41769 24.1572 7.40006C24.1572 10.3824 26.6797 12.8001 29.7914 12.8001Z"
               stroke="#484848"
-              stroke-width="2.60336"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2.60336"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
             <path
               d="M7.25427 25.3997C10.3659 25.3997 12.8884 22.982 12.8884 19.9997C12.8884 17.0173 10.3659 14.5996 7.25427 14.5996C4.14261 14.5996 1.62012 17.0173 1.62012 19.9997C1.62012 22.982 4.14261 25.3997 7.25427 25.3997Z"
               stroke="#484848"
-              stroke-width="2.60336"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2.60336"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
             <path
               d="M29.7914 37.9998C32.903 37.9998 35.4255 35.5821 35.4255 32.5998C35.4255 29.6174 32.903 27.1997 29.7914 27.1997C26.6797 27.1997 24.1572 29.6174 24.1572 32.5998C24.1572 35.5821 26.6797 37.9998 29.7914 37.9998Z"
               stroke="#484848"
-              stroke-width="2.60336"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2.60336"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
             <path
               d="M12.1182 22.7188L24.9453 29.8828"
               stroke="#484848"
-              stroke-width="2.60336"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2.60336"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
             <path
               d="M24.9255 10.1187L12.1172 17.2827"
               stroke="#484848"
-              stroke-width="2.60336"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2.60336"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </svg>
           <svg
@@ -207,8 +209,8 @@ const Site = ({
   wilayaCoords,
   destination,
 }: {
-  region: any;
-  wilaya: any;
+  region: RegionWithWilayas;
+  wilaya: Wilaya;
   wilayaCoords: [number, number];
   destination: string;
 }) => {
@@ -270,9 +272,7 @@ const Site = ({
             let link = await response.json();
 
             hotel.link = link;
-          } catch (error) {
-            console.log("Unauthorized Access");
-          }
+          } catch (error) {}
         });
 
         setHotels(hotelsResults as any);
@@ -327,9 +327,7 @@ const Site = ({
             let link = await response.json();
 
             restaurant.link = link;
-          } catch (error) {
-            console.log("Unauthorized Access");
-          }
+          } catch (error) {}
         });
 
         setRestaurants(restaurantsResults as any);
@@ -341,8 +339,9 @@ const Site = ({
     fetchData();
     const fetchImages = async () => {
       try {
+        console.log(region?.id, wilaya?.id, site?.id);
         const response = await fetch(
-          `https://bitter-surf-8047.fly.dev/https://api.imagekit.io/v1/files/?path=assets/images/${region?.id}/${wilaya?.id}/Sites/${site?.id}/images&sort=ASC_NAME`,
+          `https://bitter-surf-8047.fly.dev/https://api.imagekit.io/v1/files/?path=assets/images/${region?.id}/${wilaya?.id}/sites/${site?.id}&sort=ASC_NAME`,
           {
             headers: {
               Authorization: `Basic ${btoa(
@@ -353,6 +352,8 @@ const Site = ({
         );
 
         const data = await response.json();
+
+        console.log(data);
 
         setSiteImages(data);
       } catch (error) {
@@ -409,14 +410,14 @@ const SiteFetcher = ({
   wilayaName,
   destination,
 }: {
-  region: any;
+  region: RegionWithWilayas;
   wilayaName: string;
   destination: string;
 }) => {
   const { data } = api.wilayas.getOne.useQuery({ name: wilayaName });
   const wilaya = data;
 
-  const [wilayaCoords, setWilayaCoords] = useState<[number, number]>([0, 0]);
+  const [wilayaCoords, setWilayaCoords] = useState<[number, number]>();
 
   useEffect(() => {
     const fetchCoordinates = async (destination: string) => {
@@ -428,10 +429,6 @@ const SiteFetcher = ({
       fetchCoordinates(wilaya!.name);
     }
   }, [wilaya]);
-
-  if (!region) {
-    return null;
-  }
 
   if (!wilaya) {
     return null;

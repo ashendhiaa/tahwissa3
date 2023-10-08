@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 
-import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
 const admin = {
@@ -923,6 +922,159 @@ const sites = [
     price: 150,
     position: [5.75, 23.25],
     wilayaId: 56,
+  },
+];
+
+const newSites = [
+  {
+    name: "Tlemcen Great Mosque",
+    description:
+      "The Tlemcen Great Mosque, also known as Djamaa el-Kebir, is a masterpiece of Islamic architecture dating back to the 12th century. This iconic mosque boasts intricate geometric designs, stunning minarets, and a serene courtyard. Its historical significance and architectural beauty make it a must-visit for anyone interested in culture and history.",
+    visit: 2010,
+    link: "https://en.wikipedia.org/wiki/Great_Mosque_of_Tlemcen",
+    price: 0,
+    position: [34.88369, -1.31037],
+    wilayaId: 1,
+  },
+  {
+    name: "Beni Add Caves",
+    description:
+      "The Beni Add Caves are a captivating natural wonder in Tlemcen. Featuring intricate stalactite and stalagmite formations, these limestone caves offer a fascinating underground experience. Exploring the caves provides insight into the geological processes that shaped the region. The site is a must-visit for those intrigued by Earth's natural beauty.",
+    visit: 2076,
+    link: "https://fr.wikipedia.org/wiki/Grotte_des_Beni_Add",
+    price: 50,
+    position: [34.85287, -1.20656],
+    wilayaId: 1,
+  },
+  {
+    name: "El Mechouar Palace",
+    description:
+      "El Mechouar Palace is a historic architectural masterpiece located in Tlemcen. This palace complex showcases a blend of Moorish and Gothic architectural styles, reflecting the city's rich cultural heritage. It comprises a mosque, a mausoleum, and a madrasa, all adorned with intricate designs and patterns. El Mechouar Palace holds both religious and cultural significance and provides a fascinating glimpse into the history and artistry of Tlemcen.",
+    visit: 2100,
+    link: "https://en.wikipedia.org/wiki/El_Mechouar_Palace",
+    price: 0,
+    position: [34.88093, -1.30886],
+    wilayaId: 1,
+  },
+  {
+    name: "Lalla Setti Plateau",
+    description:
+      "Lalla Setti Plateau is a picturesque location offering panoramic views of Tlemcen and its surroundings. It's an ideal spot for a leisurely stroll, a relaxing picnic, or simply soaking in the stunning landscapes. The plateau provides a peaceful escape from the urban hustle and bustle, allowing visitors to connect with nature.",
+    visit: 1896,
+    link: "http://www.tlemcen-dz.com/endroits-visiter/plateau-lalla-setti-tlemcen.html",
+    price: 0,
+    position: [34.8681247, -1.3187667],
+    wilayaId: 1,
+  },
+  {
+    name: "El-Ourit Waterfalls",
+    description:
+      "El-Ourit Waterfalls are a natural wonder located near Tlemcen. These picturesque waterfalls cascade down rocky cliffs amidst lush greenery, creating a stunning and serene natural setting. The area around the waterfalls offers a peaceful escape from the city, making it an ideal spot for nature lovers and hikers. Visitors can enjoy the soothing sound of flowing water and explore the surrounding trails for a refreshing outdoor experience.",
+    visit: 891,
+    link: "https://en.wikipedia.org/wiki/El-Ourit_Waterfalls",
+    price: 0,
+    position: [34.8626314, -1.2671621],
+    wilayaId: 1,
+  },
+  {
+    name: "Mansourah Mosque",
+    description:
+      "Mansourah Mosque is a prime example of Almoravid architecture, known for its unique octagonal minaret and intricate tile work. The mosque's historical importance and stunning details make it a remarkable site to explore. It offers a glimpse into Tlemcen's past and architectural achievements.",
+    visit: 1570,
+    link: "https://en.wikipedia.org/wiki/Mansourah_Mosque",
+    price: 0,
+    position: [34.8765, -1.3093],
+    wilayaId: 1,
+  },
+  {
+    name: "Tomb of Syphax",
+    description:
+      "The Tomb of Syphax is an ancient historical site near Ain Temouchent. It is associated with Syphax, a legendary figure from the Punic Wars. This archaeological site features ruins and a tomb that provide insight into the area's rich history. Visitors can explore the remains and learn about the historical significance of Syphax.",
+    visit: 3500,
+    price: 90,
+    link: "https://fr.wikipedia.org/wiki/Mausol%C3%A9e_de_Beni-Rh%C3%A9nane",
+    position: [35.26293, -1.4309142],
+    wilayaId: 2,
+  },
+  {
+    name: "Cap Figalo",
+    description:
+      "Cap Figalo is a picturesque coastal area near Ain Temouchent, known for its stunning cliffs, rocky landscapes, and panoramic views of the Mediterranean Sea. It's a popular destination for nature enthusiasts and photographers. Visitors can explore the rugged terrain, enjoy the refreshing sea breeze, and take in the breathtaking coastal scenery.",
+    visit: 4500,
+    price: 0,
+    link: "https://fr.wikipedia.org/wiki/Cap_Figalo",
+    position: [35.5728181, -1.1962781],
+    wilayaId: 2,
+  },
+  {
+    name: "Leilla Island",
+    description:
+      "Leilla Island or Island of Limacos is a volcanic gem nestled in the Mediterranean Sea, just off the coast of Ain Temouchent in northwest Algeria. Spanning approximately 26 hectares, this island is a natural wonder steeped in history. Its unique square-shaped lighthouse, standing at an impressive height of 15 meters above the island's terrain and 28 meters above sea level, is an iconic symbol of the island's heritage.",
+    visit: 3800,
+    price: 2000,
+    link: "https://en.wikipedia.org/wiki/Island_of_Limacos",
+    position: [35.3218532, -1.4803432],
+    wilayaId: 2,
+  },
+  {
+    name: "Aqua Park Rachgoun",
+    description:
+      "Aqua Park Rachgoun is a vibrant and entertaining water park located near Ain Temouchent, Algeria. Spread over a sprawling area, it's a popular destination for families, thrill-seekers, and anyone looking for a fun day out. The park boasts a wide range of water attractions, including thrilling water slides, lazy rivers, wave pools, and kid-friendly splash zones.",
+    visit: 2500,
+    price: 1500,
+    link: "https://www.instagram.com/aquaparkrechgoun",
+    position: [35.2949475, -1.4745041],
+    wilayaId: 2,
+  },
+  {
+    name: "Complexe Thermale de Hammam Bouhadjar",
+    description:
+      "The Complexe Thermale de Hammam Bouhadjar is a renowned thermal spa complex located in the serene town of Hammam BouHadjar within the Ain Temouchent province of Algeria. This complex is celebrated for its therapeutic thermal springs and wellness facilities, making it a sought-after destination for relaxation and healing. Visitors can immerse themselves in the soothing and rejuvenating waters, surrounded by picturesque landscapes.",
+    visit: 4800,
+    price: 5000,
+    link: "https://fr.wikipedia.org/wiki/Hammam_Bou_Hadjar_(station_thermale)",
+    position: [35.3701948, -0.9677301],
+    wilayaId: 2,
+  },
+  {
+    name: "Guitare Beach",
+    description:
+      "Guitare Beach is a pristine coastal gem located in the heart of Ain Temouchent, Algeria. This picturesque beach is famous for its soft golden sands, crystal-clear turquoise waters, and breathtaking sunsets. It's a popular destination for beachgoers, families, and water sports enthusiasts. Visitors can enjoy a leisurely sunbath, take refreshing swims, and engage in thrilling activities such as jet skiing and beach volleyball. The beach is dotted with cozy cafes and vendors offering delectable local treats. With its serene ambiance and stunning natural beauty, Golden Sands Beach provides an idyllic escape for anyone seeking relaxation and seaside fun.",
+    visit: 1000,
+    price: 0,
+    link: "https://capdz.dz/2023/07/22/ain-temouchent-la-guitare-un-site-paradisiaque-a-visiter",
+    position: [35.5649485, -1.1925463],
+    wilayaId: 2,
+  },
+  {
+    name: "Mosta Land",
+    description:
+      "Mostaland Parc is a captivating theme park nestled in the scenic city of Mostaganem, along the enchanting shores of the Mediterranean Sea. Opened its gates to visitors on July 13, 2017, spanning 57 hectares, the park is a delightful sanctuary where visitors can explore the marvels of nature. The heart of Mostaland Parc encompasses a 32-hectare zoo, where a diverse array of wildlife thrives, from exotic birds serenading the skies to playful animals enchanting the hearts of all who visit. Wandering through the park's lush pathways, visitors are immersed in a symphony of natural sounds – from the melodious tunes of songbirds to the gentle rustle of leaves. It's a haven where families, nature enthusiasts, and curious minds converge, creating memories amidst blooming flowers and the whispering sea breeze. Mostaland Parc is not just a destination; it's a serene escape where laughter harmonizes with the rustling leaves, inviting all to embark on a journey of discovery, wonder, and unparalleled tranquility.",
+    visit: 3000,
+    price: 100,
+    link: "https://www.mostalandparc.com",
+    position: [35.9566, 0.095],
+    wilayaId: 4,
+  },
+  {
+    name: "Cap Ivi",
+    description:
+      "Cap Ivi is a breathtakingly beautiful cape located in Mostaganem, Algeria. It is home to a pristine beach with crystal-clear waters, golden sand dunes, and a majestic lighthouse. The lighthouse, which was built in 1870, offers stunning views of the surrounding coastline and the Mediterranean Sea. Cap Ivi is a popular destination for swimming, sunbathing, picnicking, and hiking. It is also a great place to simply relax and enjoy the natural beauty of Algeria.",
+    visit: 1200,
+    price: 0,
+    link: "https://fr.wikipedia.org/wiki/Phare_de_Cap_Ivi",
+    position: [36.11751, 0.22198],
+    wilayaId: 4,
+  },
+  {
+    name: "AZ Aquapark",
+    description:
+      "AZ Aquapark is a fun-filled water park located in Mostaganem, Algeria. It features a variety of water slides, pools, and attractions for all ages, including a lazy river, wave pool, and multi-lane slides. AZ Aquapark is also home to a restaurant and snack bar, so you can refuel while you play.",
+    visit: 3100,
+    price: 200,
+    link: "https://www.azhotels.dz/aquapark/",
+    position: [35.952704, 0.0942938],
+    wilayaId: 4,
   },
 ];
 

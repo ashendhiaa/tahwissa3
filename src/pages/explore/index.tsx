@@ -1,3 +1,5 @@
+import { SectionPlaces } from "~/components/Section";
+import Glide from "@glidejs/glide";
 import { useActions, useAppDispatch } from "../../hooks";
 import ScrollContainer from "react-indiana-drag-scroll";
 import Image, { type StaticImageData } from "next/image";
@@ -14,8 +16,10 @@ import gallery4 from "/public/assets/gallery4.png";
 import { getAllRegions, selectRegionsState } from "~/store/regionsReducer";
 import { useSelector } from "react-redux";
 import { api } from "~/utils/api";
-import { SectionPlaces } from "~/components/Section";
 import { Site } from "@prisma/client";
+import { RegionWithWilayas } from "~/types";
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 
 // ? This is the Card that defines one Wilaya and its images
 
@@ -36,8 +40,7 @@ const DestinationCard = ({
   );
 };
 
-// ? This is the Section that defines the Top Destinations section
-
+// * This is the Section that defines the Top Destinations section
 const TopSection = ({
   list,
   img,
@@ -52,7 +55,7 @@ const TopSection = ({
   );
 
   return (
-    <section className="mb-[10.498vw] mt-[9.35416vw] w-full">
+    <section className="w-full">
       <div className="flex items-center">
         <h3 className="semi-title">Top Destinations</h3>
         <button
@@ -277,7 +280,20 @@ const Gallery = ({ gallery }: { gallery: StaticImageData[] }) => {
   );
 };
 
-const Explore = ({ sites }: { sites: Site[] }) => {
+const TopSites = dynamic(
+  async () => (await import("~/components/Section")).TopSites,
+  {
+    ssr: false,
+  }
+);
+
+const Explore = ({
+  sites,
+  regions,
+}: {
+  sites: Site[];
+  regions: RegionWithWilayas[];
+}) => {
   const listWilayas = [
     "Mostaganem",
     "Mostaganem",
@@ -286,14 +302,7 @@ const Explore = ({ sites }: { sites: Site[] }) => {
     "Mostaganem",
     "Mostaganem",
   ];
-  const listMust = [
-    { name: "Sacred Heart Cathedral", location: "Oran, Oran province" },
-    { name: "Sacred Heart Cathedral", location: "Oran, Oran province" },
-    { name: "Sacred Heart Cathedral", location: "Oran, Oran province" },
-    { name: "Sacred Heart Cathedral", location: "Oran, Oran province" },
-    { name: "Sacred Heart Cathedral", location: "Oran, Oran province" },
-    { name: "Sacred Heart Cathedral", location: "Oran, Oran province" },
-  ];
+
   const listGallery = [
     gallery1,
     gallery2,
@@ -303,6 +312,14 @@ const Explore = ({ sites }: { sites: Site[] }) => {
     gallery2,
   ];
 
+  if (sites.length === 0) {
+    return <div>Loading...</div>;
+  }
+
+  if (regions.length === 0) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <main>
       <header>
@@ -310,7 +327,7 @@ const Explore = ({ sites }: { sites: Site[] }) => {
         <div className="absolute left-[10.0911vw] top-[19.46614vw]">
           <h1 className="title text-white">Algeria</h1>
           <h2 className="bg-semi-title text-white">
-            The world’s best hidden gem
+            The w&orld’s best hidden gem
           </h2>
         </div>
       </header>
@@ -335,13 +352,10 @@ const Explore = ({ sites }: { sites: Site[] }) => {
           />
         </section>
         <TopSection list={listWilayas} img={mosta} />
-        {/* TODO:
-                <SectionPlaces
-          data={sites}
-          section="Must Sees"
-          wilaya={wilaya}
-          regionId={region.id}
-        />*/}
+        {
+          //
+        }
+        <TopSites section="Must Sees" data={sites} regions={regions} />
       </div>
       <Happening poster={poster} sqrposter={sqrposter} />
       <Gallery gallery={listGallery} />
@@ -358,7 +372,7 @@ const FetcherComponent = () => {
 
   if (!regions || !topSites) return null;
 
-  return <Explore sites={topSites} />;
+  return <Explore sites={topSites} regions={regions}></Explore>;
 };
 
 export default FetcherComponent;
