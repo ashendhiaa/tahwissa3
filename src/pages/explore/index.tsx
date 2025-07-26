@@ -327,7 +327,7 @@ const Explore = ({
         <div className="absolute left-[10.0911vw] top-[19.46614vw]">
           <h1 className="title text-white">Algeria</h1>
           <h2 className="bg-semi-title text-white">
-            The w&orld’s best hidden gem
+            The world’s best hidden gem
           </h2>
         </div>
       </header>

@@ -7,6 +7,7 @@ import { z } from "zod";
 const server = z.object({
   DATABASE_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "test", "production"]),
+  JWT_SECRET: z.string().min(1),
 });
 
 /**
@@ -14,7 +15,13 @@ const server = z.object({
  * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
  */
 const client = z.object({
-  // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
+  NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN: z.string().min(1),
+  NEXT_PUBLIC_MAPBOX_USERNAME: z.string().min(1),
+  NEXT_PUBLIC_MAPBOX_STYLE_ID: z.string().min(1),
+  NEXT_PUBLIC_GOOGLE_API_KEY: z.string().min(1),
+  NEXT_PUBLIC_API_KEY: z.string().min(1),
+  NEXT_PUBLIC_TRIPADVISOR_API_KEY: z.string().min(1),
+  NEXT_PUBLIC_IMAGE_KIT_PRIVATE_KEY: z.string().min(1),
 });
 
 /**
@@ -26,7 +33,14 @@ const client = z.object({
 const processEnv = {
   DATABASE_URL: process.env.DATABASE_URL,
   NODE_ENV: process.env.NODE_ENV,
-  // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+  JWT_SECRET: process.env.JWT_SECRET,
+  NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN: process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN,
+  NEXT_PUBLIC_MAPBOX_USERNAME: process.env.NEXT_PUBLIC_MAPBOX_USERNAME,
+  NEXT_PUBLIC_MAPBOX_STYLE_ID: process.env.NEXT_PUBLIC_MAPBOX_STYLE_ID,
+  NEXT_PUBLIC_GOOGLE_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
+  NEXT_PUBLIC_API_KEY: process.env.NEXT_PUBLIC_API_KEY,
+  NEXT_PUBLIC_TRIPADVISOR_API_KEY: process.env.NEXT_PUBLIC_TRIPADVISOR_API_KEY,
+  NEXT_PUBLIC_IMAGE_KIT_PRIVATE_KEY: process.env.NEXT_PUBLIC_IMAGE_KIT_PRIVATE_KEY,
 };
 
 // Don't touch the part below

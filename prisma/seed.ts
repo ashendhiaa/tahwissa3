@@ -1084,13 +1084,15 @@ async function main() {
   console.log("Clearing the database");
 
   await prisma.site.deleteMany();
-  await prisma.$queryRaw`ALTER TABLE Site AUTO_INCREMENT = 1`;
   await prisma.user.deleteMany();
-  await prisma.$queryRaw`ALTER TABLE User AUTO_INCREMENT = 1`;
   await prisma.wilaya.deleteMany();
-  await prisma.$queryRaw`ALTER TABLE Wilaya AUTO_INCREMENT = 1`;
   await prisma.region.deleteMany();
-  await prisma.$queryRaw`ALTER TABLE Region AUTO_INCREMENT = 1`;
+
+  // Reset sequences for PostgreSQL (auto-increment equivalent)
+  // await prisma.$queryRaw`ALTER SEQUENCE "Site_pkey" RESTART WITH 1`;
+  // await prisma.$queryRaw`ALTER SEQUENCE "User_pkey" RESTART WITH 1`;
+  // await prisma.$queryRaw`ALTER SEQUENCE "Wilaya_pkey" RESTART WITH 1`;
+  // await prisma.$queryRaw`ALTER SEQUENCE "Region_pkey" RESTART WITH 1`;
 
   console.log("Seeding some data to the database");
 
@@ -1117,6 +1119,10 @@ async function main() {
 
   await prisma.site.createMany({
     data: sites,
+  });
+
+  await prisma.site.createMany({
+    data: newSites,
   });
 }
 
