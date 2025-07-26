@@ -12,7 +12,7 @@ import {
 import { useAppDispatch } from "~/hooks";
 import { getAllRegions, selectRegionsState } from "~/store/regionsReducer";
 import { RegionWithWilayas } from "~/types";
-import { Site, Wilaya } from "@prisma/client";
+import type { Site, Wilaya } from "@prisma/client";
 
 const fetchDestination = async (name: string) => {
   const response = await fetch(

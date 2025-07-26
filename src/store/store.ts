@@ -1,6 +1,4 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import { ThunkDispatch } from "redux-thunk";
-import { AnyAction } from "redux";
 
 import regionsReducer from "./regionsReducer";
 import wilayasReducer from "./wilayasReducer";
@@ -17,7 +15,7 @@ const store = () =>
 
 export type AppStore = ReturnType<typeof store>;
 export type AppState = ReturnType<AppStore["getState"]>;
-export type AppDispatch = ThunkDispatch<AppState, void, AnyAction>;
+export type AppDispatch = AppStore["dispatch"];
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   AppState,
